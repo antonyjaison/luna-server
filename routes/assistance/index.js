@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
   const vectorstore = await vectorStorePromise;
 
   let context = "";
-
+  
   const docs = await vectorstore.similaritySearch(task, 5);
 
   docs.forEach((doc) => {

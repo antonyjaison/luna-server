@@ -3,6 +3,8 @@ import passport from "passport";
 import session from "express-session";
 import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 import dotenv from "dotenv";
+import crypto from "crypto";
+import prisma from "../../config/prismaClient.js";
 
 dotenv.config();
 
@@ -35,11 +37,27 @@ passport.use(
       proxy: process.env.NODE_ENV === "production",
       passReqToCallback: true,
     },
-    (req, accessToken, refreshToken, profile, done) => {
-      profile.accessToken = accessToken;
-      profile.refreshToken = refreshToken;
+    async (req, accessToken, refreshToken, profile, done) => {
+      try {
+        let user = await prisma.user.findUnique({
+          where: { email: profile.email },
+        });
 
-      return done(null, profile);
+        if (!user) {
+          user = await prisma.user.create({
+            data: {
+              email: profile.email,
+              displayName: profile.displayName,
+              picture: profile.picture,
+              refreshToken,
+            },
+          });
+        }
+
+        return done(null, user);
+      } catch (error) {
+        return done(error, null);
+      }
     }
   )
 );
@@ -49,7 +67,6 @@ passport.serializeUser((user, done) => {
     id: user.id,
     email: user.email,
     displayName: user.displayName,
-    accessToken: user.accessToken,
     image: user.picture,
   });
 });
@@ -67,7 +84,7 @@ router.get("/me", (req, res) => {
 });
 
 router.get("/login", (req, res) => {
-  res.send(`<a href="/auth/google">Login with google</a>`);
+  res.send(`<a href="/auth/google">Login with Google</a>`);
 });
 
 router.get(
