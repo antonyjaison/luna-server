@@ -11,6 +11,8 @@ import rateLimit from "express-rate-limit";
 import assistanceRoute from "./routes/assistance/index.js";
 import commandRoute from "./routes/command/index.js";
 import authRoute from "./routes/auth/index.js";
+import { uploadRouter } from "./routes/upload/index.js";
+import fileUpload from "express-fileupload";
 
 dotenv.config();
 
@@ -41,6 +43,8 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(fileUpload());
+
 
 passport.use(
   new GoogleStrategy(
@@ -85,6 +89,15 @@ app.use(
   })
 );
 
+
+// app.get("/", (req, res) => {
+//   // simple html repose saying hello world
+//   res.send(`<div><h1>Hello World</h1><form method="POST" action="/upload" enctype="multipart/form-data">
+//     <input type="file" name="file"/>
+//     <button type="submit">Upload</button>
+//     </form></div>`);
+// });
+
 app.get("/me", (req, res) => {
   console.log(req.user);
   if (req.isAuthenticated()) {
@@ -95,6 +108,8 @@ app.get("/me", (req, res) => {
 });
 app.use("/chat", assistanceRoute);
 app.use("/command", commandRoute);
+
+app.use("/upload", uploadRouter);
 
 app.get("/login", (req, res) => {
   res.send(`<a href="/auth/google">Login with google</a>`);

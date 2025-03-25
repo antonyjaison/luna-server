@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { template } from "./prompt.js";
-import { llm } from "../../llm-config.js";
+import { llm, vectorStorePromise } from "../../llm-config.js";
 import { g_model } from "../../llm-config.js";
 
 const router = Router();
@@ -16,7 +16,17 @@ router.post("/", async (req, res) => {
 
   console.log("task => ", task);
 
-  const formattedPrompt = await promptTemplate.format({ task });
+  const vectorstore = await vectorStorePromise;
+
+  const context = "";
+
+  const docs = await vectorstore.similaritySearch(task, 5);
+
+  docs.forEach((doc) => {
+    context += doc.pageContent + "\n\n";
+  });
+
+  const formattedPrompt = await promptTemplate.format({ task, context });
   const response = await g_model.invoke([["human", formattedPrompt]]);
 
   console.log(response);
