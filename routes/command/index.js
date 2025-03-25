@@ -36,8 +36,6 @@ router.post("/", async (req, res) => {
 router.post("/execute", async (req, res) => {
   const { command } = req.body;
 
-  console.log("command => ", command);
-
   try {
     const { stdout, stderr } = await executeCommand(command);
     res.json({

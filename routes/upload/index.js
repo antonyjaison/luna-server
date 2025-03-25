@@ -34,8 +34,6 @@ uploadRouter.post("/", async (req, res) => {
   // Get the file from the request
   const file = req.files.file;
 
-  console.log("file", file);
-
   // Generate a random file name
   const fileName = crypto.randomBytes(16).toString("hex") + "_" + file.name;
   const filePath = path.join(uploadDir, fileName);

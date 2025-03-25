@@ -14,15 +14,11 @@ const promptTemplate = new PromptTemplate({
 router.post("/", async (req, res) => {
   const { task } = req.body;
 
-  console.log("task => ", task);
-
   const vectorstore = await vectorStorePromise;
 
   let context = "";
 
   const docs = await vectorstore.similaritySearch(task, 5);
-
-  console.log(docs)
 
   docs.forEach((doc) => {
     context += doc.pageContent + "\n\n";
@@ -30,8 +26,6 @@ router.post("/", async (req, res) => {
 
   const formattedPrompt = await promptTemplate.format({ task, context });
   const response = await g_model.invoke([["human", formattedPrompt]]);
-
-  console.log(response);
 
   res.send({
     response: response,
