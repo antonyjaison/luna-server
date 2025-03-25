@@ -6,13 +6,13 @@ import session from "express-session";
 import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
+import fileUpload from "express-fileupload";
 
 // routes
 import assistanceRoute from "./routes/assistance/index.js";
 import commandRoute from "./routes/command/index.js";
 import authRoute from "./routes/auth/index.js";
 import { uploadRouter } from "./routes/upload/index.js";
-import fileUpload from "express-fileupload";
 
 dotenv.config();
 
@@ -90,15 +90,6 @@ app.use(
     credentials: true,
   })
 );
-
-
-// app.get("/", (req, res) => {
-//   // simple html repose saying hello world
-//   res.send(`<div><h1>Hello World</h1><form method="POST" action="/upload" enctype="multipart/form-data">
-//     <input type="file" name="file"/>
-//     <button type="submit">Upload</button>
-//     </form></div>`);
-// });
 
 app.get("/me", (req, res) => {
   console.log(req.user);

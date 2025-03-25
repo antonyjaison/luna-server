@@ -8,21 +8,20 @@ import fs from "fs";
  * @returns {Promise<string>} - The output of the command.
  */
 export function executeCommand(command) {
-    return new Promise((resolve, reject) => {
-        exec(command, (error, stdout, stderr) => {
-            if (error) {
-                console.error(`Error executing command: ${error.message}`);
-                return reject(error);
-            }
-            if (stderr) {
-                console.warn(`Command stderr: ${stderr}`);
-                // Don't reject immediately; return both stdout and stderr
-            }
-            resolve({ stdout, stderr });
-        });
+  return new Promise((resolve, reject) => {
+    exec(command, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Error executing command: ${error.message}`);
+        return reject(error);
+      }
+      if (stderr) {
+        console.warn(`Command stderr: ${stderr}`);
+        // Don't reject immediately; return both stdout and stderr
+      }
+      resolve({ stdout, stderr });
     });
+  });
 }
-
 
 /**
  * Execute a multi-line script.
@@ -30,31 +29,31 @@ export function executeCommand(command) {
  * @returns {Promise<string>} - The output of the script.
  */
 export function executeScript(scriptContent) {
-    return new Promise((resolve, reject) => {
-        // Create a temporary file to store the script
-        tmp.file({ postfix: ".sh" }, (err, path, fd, cleanupCallback) => {
-            if (err) {
-                console.error(`Error creating temporary file: ${err.message}`);
-                return reject(err);
-            }
+  return new Promise((resolve, reject) => {
+    // Create a temporary file to store the script
+    tmp.file({ postfix: ".sh" }, (err, path, fd, cleanupCallback) => {
+      if (err) {
+        console.error(`Error creating temporary file: ${err.message}`);
+        return reject(err);
+      }
 
-            // Write the script content to the temporary file
-            fs.writeFileSync(path, scriptContent);
-            fs.chmodSync(path, 0o755); // Make the script executable
+      // Write the script content to the temporary file
+      fs.writeFileSync(path, scriptContent);
+      fs.chmodSync(path, 0o755); // Make the script executable
 
-            // Execute the script
-            exec(`bash ${path}`, (error, stdout, stderr) => {
-                cleanupCallback(); // Clean up the temporary file
-                if (error) {
-                    console.error(`Error executing script: ${error.message}`);
-                    return reject(error);
-                }
-                if (stderr) {
-                    console.warn(`Script stderr: ${stderr}`);
-                    return reject(new Error(stderr));
-                }
-                resolve(stdout);
-            });
-        });
+      // Execute the script
+      exec(`bash ${path}`, (error, stdout, stderr) => {
+        cleanupCallback(); // Clean up the temporary file
+        if (error) {
+          console.error(`Error executing script: ${error.message}`);
+          return reject(error);
+        }
+        if (stderr) {
+          console.warn(`Script stderr: ${stderr}`);
+          return reject(new Error(stderr));
+        }
+        resolve(stdout);
+      });
     });
+  });
 }

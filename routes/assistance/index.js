@@ -8,7 +8,7 @@ const router = Router();
 
 const promptTemplate = new PromptTemplate({
   template,
-  inputVariables: ["task"],
+  inputVariables: ["task", "context"],
 });
 
 router.post("/", async (req, res) => {
@@ -18,9 +18,11 @@ router.post("/", async (req, res) => {
 
   const vectorstore = await vectorStorePromise;
 
-  const context = "";
+  let context = "";
 
   const docs = await vectorstore.similaritySearch(task, 5);
+
+  console.log(docs)
 
   docs.forEach((doc) => {
     context += doc.pageContent + "\n\n";

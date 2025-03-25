@@ -9,7 +9,7 @@ const router = Router();
 
 const promptTemplate = new PromptTemplate({
   template,
-  inputVariables: ["task"],
+  inputVariables: ["task", "context"],
 });
 
 router.post("/", async (req, res) => {
