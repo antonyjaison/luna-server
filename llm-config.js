@@ -1,5 +1,24 @@
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { Ollama } from "@langchain/ollama";
+import { Chroma } from "@langchain/community/vectorstores/chroma"
+
+
+
+import { OllamaEmbeddings } from "@langchain/ollama";
+
+const embeddings = new OllamaEmbeddings({
+  model: "nomic-embed-text:latest",
+  baseUrl: "http://localhost:11434",
+});
+
+
+
+
+export const vectorStorePromise = Chroma.fromDocuments([], embeddings, {
+  collectionName: "documents",
+  // Optionally, specify the ChromaDB server URL if different:
+  url: "http://localhost:8000"
+});
 
 export const llm = new Ollama({
   baseUrl: "http://localhost:11434",
