@@ -52,6 +52,8 @@ passport.use(
       passReqToCallback: true,
     },
     (req, accessToken, refreshToken, profile, done) => {
+      console.log("refreshToken", refreshToken);
+
       profile.accessToken = accessToken;
       profile.refreshToken = refreshToken;
 
@@ -99,10 +101,16 @@ app.use("/command", commandRoute);
 app.get("/login", (req, res) => {
   res.send(`<a href="/auth/google">Login with google</a>`);
 });
+
 app.get(
   "/auth/google",
-  passport.authenticate("google", { scope: ["email", "profile"] })
+  passport.authenticate("google", {
+    scope: ["email", "profile", "https://www.googleapis.com/auth/gmail.send"],
+    accessType: "offline",
+    prompt: "consent",
+  })
 );
+
 app.get(
   "/auth/google/callback",
   passport.authenticate("google", { failureRedirect: "/" }),
