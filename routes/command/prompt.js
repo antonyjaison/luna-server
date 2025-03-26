@@ -29,6 +29,4 @@ DO NOT GENERATE:
 
 Task: {task}
 
-Context: {context}
-
 Command:`;

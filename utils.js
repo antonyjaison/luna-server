@@ -34,5 +34,5 @@ export async function sendEmailFromUser(user) {
     requestBody: { raw: encodedEmail },
   });
 
-  console.log("✅ Email sent successfully!");
+  return true;
 }

@@ -101,6 +101,10 @@ router.get(
   })
 );
 
+router.get("/logout", (req, res) => {
+  req.logout();
+});
+
 router.get(
   "/google/callback",
   passport.authenticate("google", { failureRedirect: "/" }),

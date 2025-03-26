@@ -11,6 +11,7 @@ import commandRoute from "./routes/command/index.js";
 import authRoute from "./routes/auth/index.js";
 import { uploadRouter } from "./routes/upload/index.js";
 import emailRoute from "./routes/email/index.js"
+import fileChatRoute from './routes/file-chat/index.js'
 
 dotenv.config();
 
@@ -38,6 +39,7 @@ app.use("/command", commandRoute);
 app.use("/upload", uploadRouter);
 app.use("/auth", authRoute);
 app.use("/email", emailRoute)
+app.use("/file-chat", fileChatRoute)
 
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "healthy" });
