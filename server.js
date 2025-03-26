@@ -10,6 +10,7 @@ import assistanceRoute from "./routes/assistance/index.js";
 import commandRoute from "./routes/command/index.js";
 import authRoute from "./routes/auth/index.js";
 import { uploadRouter } from "./routes/upload/index.js";
+import emailRoute from "./routes/email/index.js"
 
 dotenv.config();
 
@@ -36,6 +37,7 @@ app.use("/chat", assistanceRoute);
 app.use("/command", commandRoute);
 app.use("/upload", uploadRouter);
 app.use("/auth", authRoute);
+app.use("/email", emailRoute)
 
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "healthy" });

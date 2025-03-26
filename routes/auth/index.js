@@ -54,12 +54,16 @@ passport.use(
           });
         }
 
+        console.log("User:", req.user);
+
         return done(null, user);
       } catch (error) {
         return done(error, null);
       }
     }
   )
+
+  
 );
 
 passport.serializeUser((user, done) => {
@@ -68,6 +72,7 @@ passport.serializeUser((user, done) => {
     email: user.email,
     displayName: user.displayName,
     image: user.picture,
+    refreshToken: user.refreshToken,
   });
 });
 

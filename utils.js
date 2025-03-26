@@ -16,12 +16,12 @@ export async function sendEmailFromUser(user) {
 
   const emailContent = [
     `From: ${user.email}`,
-    "To: antonyjaison456@gmail.com",
-    "Subject: Test Email",
+    `To: ${user.recipient}`,
+    `Subject: ${user.subject}`,
     "MIME-Version: 1.0",
     'Content-Type: text/plain; charset="UTF-8"',
     "",
-    "Hello, this is a test email sent via Gmail API.",
+    `${user.message}`,
   ].join("\n");
 
   const encodedEmail = Buffer.from(emailContent)
